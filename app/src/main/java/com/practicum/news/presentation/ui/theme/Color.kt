@@ -1,4 +1,4 @@
-package com.practicum.news.ui.theme
+package com.practicum.news.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
