@@ -41,6 +41,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.material.icons.extended)
+
     implementation(libs.converter.kotlinx.serialization)
     implementation(libs.retrofit)
 
