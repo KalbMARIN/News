@@ -1,6 +1,11 @@
 package com.practicum.news.data.repository
 
+import android.icu.util.TimeUnit
 import android.util.Log
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.practicum.news.data.background.RefreshDataWorker
 import com.practicum.news.data.local.ArticleDbModel
 import com.practicum.news.data.local.NewsDao
 import com.practicum.news.data.local.SubscriptionDbModel
@@ -19,10 +24,11 @@ import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
     private val newsDao: NewsDao,
-    private val newsApiService: NewsApiService
+    private val newsApiService: NewsApiService,
+    private val workManager: WorkManager
 ) : NewsRepository {
     override fun getAllSubscriptions(): Flow<List<String>> {
-        return newsDao.getAllSubscriptions().map {subscriptions ->
+        return newsDao.getAllSubscriptions().map { subscriptions ->
             subscriptions.map { it.topic }
         }
     }
@@ -67,6 +73,18 @@ class NewsRepositoryImpl @Inject constructor(
         return newsDao.getAllArticlesByTopics(topics).map {
             it.toEntities()
         }
+    }
+
+    private fun startBackgroundRefresh() {
+        val request = PeriodicWorkRequestBuilder<RefreshDataWorker>(
+            15L, java.util.concurrent.TimeUnit.MINUTES
+        ).build()
+
+        workManager.enqueueUniquePeriodicWork(
+            uniqueWorkName = "Refresh data",
+            existingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+            request = request
+        )
     }
 
     override suspend fun clearAllArticles(topics: List<String>) {

@@ -2,6 +2,7 @@ package com.practicum.news.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.practicum.news.data.local.NewsDao
 import com.practicum.news.data.local.NewsDatabase
 import com.practicum.news.data.remote.NewsApiService
@@ -32,6 +33,13 @@ interface DataModule {
     ): NewsRepository
 
     companion object {
+
+        @Provides
+        @Singleton
+        fun provideWorkManager(
+            @ApplicationContext context: Context
+        ) : WorkManager = WorkManager.getInstance(context)
+
 
         @Provides
         @Singleton
