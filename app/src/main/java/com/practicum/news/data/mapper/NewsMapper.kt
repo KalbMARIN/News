@@ -3,6 +3,7 @@ package com.practicum.news.data.mapper
 import com.practicum.news.data.local.ArticleDbModel
 import com.practicum.news.data.remote.NewsResponseDto
 import com.practicum.news.domain.entity.Article
+import com.practicum.news.domain.entity.Interval
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -18,6 +19,10 @@ fun NewsResponseDto.toDbModels(topic: String): List<ArticleDbModel> {
             publishedAt = it.publishedAt.toTimestamp()
         )
     }
+}
+
+fun Int.toInterval(): Interval {
+    return Interval.entries.first { it.minutes == this }
 }
 
 fun List<ArticleDbModel>.toEntities(): List<Article> {
