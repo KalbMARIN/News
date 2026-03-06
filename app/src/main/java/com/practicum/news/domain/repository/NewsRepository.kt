@@ -1,11 +1,14 @@
 package com.practicum.news.domain.repository
 
 import com.practicum.news.domain.entity.Article
+import com.practicum.news.domain.entity.RefreshConfig
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
 
     fun getAllSubscriptions(): Flow<List<String>>
+
+    fun startBackgroundRefresh(refreshConfig: RefreshConfig)
 
     suspend fun addSubscription(topic: String)
 
