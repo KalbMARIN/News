@@ -165,7 +165,7 @@ private fun SubscriptionsTopBar(
                     .clickable {
                         onRefreshDataClick()
                     }
-                    .padding(8.dp),
+                    .padding(12.dp),
                 imageVector = Icons.Default.Refresh,
                 contentDescription = stringResource(R.string.update_articles)
             )
